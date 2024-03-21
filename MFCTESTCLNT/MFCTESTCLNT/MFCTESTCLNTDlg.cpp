@@ -7,8 +7,10 @@
 #include "MFCTESTCLNT.h"
 #include "MFCTESTCLNTDlg.h"
 #include "afxdialogex.h"
+#include <iostream>
 
 #ifdef _DEBUG
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #define new DEBUG_NEW
 #endif
 
@@ -196,15 +198,21 @@ void CMFCTESTCLNTDlg::OnBnClickedBtnFile()
 	CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\testfile\\shape.jpg");
 
 	sourceFile.Open((LPCTSTR)strFilePath, CFile::modeRead | CFile::typeBinary);
-	byte* data = new byte[4096];
+
 	DWORD dwRead;
 
-	do
-	{
-		dwRead = sourceFile.Read(data, 4096);
-		m_Socket.Send(data, dwRead);
-	} while (dwRead > 0);
+	int nFileLength = sourceFile.GetLength();
+	m_Socket.Send(&nFileLength, 4);
 
-	delete data;
+	byte* data = new byte[nFileLength];
+	dwRead = sourceFile.Read(data, nFileLength);
+	m_Socket.Send(data, dwRead);
+	//do
+	//{
+	//	dwRead = sourceFile.Read(data, 4096);
+	//	m_Socket.Send(data, dwRead);
+	//} while (dwRead > 0);
+
+	//delete data;
 	sourceFile.Close();
 }

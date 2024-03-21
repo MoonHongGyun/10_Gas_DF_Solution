@@ -6,6 +6,7 @@
 #include "CClientSocket.h"
 #include "CListenSocket.h"
 #include "MFCTESTSERVDlg.h"
+#include <iostream>
 
 
 
@@ -35,17 +36,26 @@ void CClientSocket::OnReceive(int nErrorCode)
     CFile targetfile;
     targetfile.Open(strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
 
-    byte* data = new byte[4096];
-    DWORD dwRead;
+    int nFileLength;
+    Receive(&nFileLength, 4);
 
-    do
-    {
-        dwRead = Receive(data, 4096);
-        targetfile.Write(data, dwRead);
-    } while (dwRead > 0);
+    byte* data = new byte[nFileLength];
+    
+    DWORD dwRead;
+    dwRead = Receive(data, nFileLength);
+    targetfile.Write(data, dwRead);
+    //do
+    //{
+    //    dwRead = Receive(data, 4096);
+    //    targetfile.Write(data, dwRead);
+    //} while (dwRead > 0);
 
     delete data;
     targetfile.Close();
+
+    CMFCTESTSERVDlg* pMain = (CMFCTESTSERVDlg*)AfxGetMainWnd();
+
+    pMain->ViewImage(strFilePath);
 
     //CString strTmp = _T(""), strIPAddress = _T("");
     //UINT uPortNumber = 0;

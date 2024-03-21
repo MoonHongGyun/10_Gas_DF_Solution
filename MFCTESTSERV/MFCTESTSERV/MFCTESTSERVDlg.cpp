@@ -10,6 +10,7 @@
 #include "CClientSocket.h"
 
 #ifdef _DEBUG
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #define new DEBUG_NEW
 #endif
 
@@ -62,6 +63,7 @@ void CMFCTESTSERVDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_List);
 	DDX_Control(pDX, IDC_LIST2, clientList);
+	DDX_Control(pDX, IDC_STATIC_PIC, m_picture_control);
 }
 
 BEGIN_MESSAGE_MAP(CMFCTESTSERVDlg, CDialogEx)
@@ -188,4 +190,17 @@ void CMFCTESTSERVDlg::OnDestroy()
 	m_ListenSocket.ShutDown();
 	m_ListenSocket.Close();
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+}
+
+void CMFCTESTSERVDlg::ViewImage(CString strFilePath)
+{
+	CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
+	m_picture_control.GetWindowRect(rect);//GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
+	CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터
+	dc = m_picture_control.GetDC(); //픽쳐 컨트롤의 DC를 얻는다.
+	CImage image;//불러오고 싶은 이미지를 로드할 CImage 
+	image.Load(strFilePath);//이미지 로드
+
+	image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
+	ReleaseDC(dc);//DC 해제
 }

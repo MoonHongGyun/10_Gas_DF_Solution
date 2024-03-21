@@ -37,4 +37,7 @@ public:
 	CListBox m_List;
 	CListBox clientList;
 	afx_msg void OnDestroy();
+	CStatic m_picture_control;
+
+	void ViewImage(CString strFilePath);
 };

@@ -30,8 +30,6 @@ void CConnectSocket::OnClose(int nErrorCode)
 
     AfxMessageBox(_T("ERROR:Disconnected from server!"));
     ::PostQuitMessage(0);
-
-	CSocket::OnClose(nErrorCode);
 }
 
 
@@ -46,6 +44,4 @@ void CConnectSocket::OnReceive(int nErrorCode)
         pMain->m_List.SetCurSel(pMain->m_List.GetCount() - 1);
     }
     CSocket::OnReceive(nErrorCode);
-
-	CSocket::OnReceive(nErrorCode);
 }
