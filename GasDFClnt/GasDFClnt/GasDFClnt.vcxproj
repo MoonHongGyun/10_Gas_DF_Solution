@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{77E645CA-5ECC-4799-85EC-4774FB5170DC}</ProjectGuid>
+    <ProjectGuid>{139A84E2-6210-4145-8A6A-2B97C985E0CD}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
-    <RootNamespace>MFCTESTSERV</RootNamespace>
+    <RootNamespace>GasDFClnt</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -183,22 +183,18 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CClientSocket.h" />
-    <ClInclude Include="CListenSocket.h" />
-    <ClInclude Include="CPythonCLNT.h" />
+    <ClInclude Include="CConnectSocket.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="MFCTESTSERV.h" />
-    <ClInclude Include="MFCTESTSERVDlg.h" />
+    <ClInclude Include="GasDFClnt.h" />
+    <ClInclude Include="GasDFClntDlg.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CClientSocket.cpp" />
-    <ClCompile Include="CListenSocket.cpp" />
-    <ClCompile Include="CPythonCLNT.cpp" />
-    <ClCompile Include="MFCTESTSERV.cpp" />
-    <ClCompile Include="MFCTESTSERVDlg.cpp" />
+    <ClCompile Include="CConnectSocket.cpp" />
+    <ClCompile Include="GasDFClnt.cpp" />
+    <ClCompile Include="GasDFClntDlg.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -207,13 +203,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MFCTESTSERV.rc" />
+    <ResourceCompile Include="GasDFClnt.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\MFCTESTSERV.rc2" />
+    <None Include="res\GasDFClnt.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\MFCTESTSERV.ico" />
+    <Image Include="res\GasDFClnt.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MFCTESTSERV.h">
+    <ClInclude Include="GasDFServ.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="MFCTESTSERVDlg.h">
+    <ClInclude Include="GasDFServDlg.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="framework.h">
@@ -33,48 +33,42 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CClientSocket.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="CListenSocket.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CPythonCLNT.h">
+    <ClInclude Include="CClientSocket.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="MFCTESTSERV.cpp">
+    <ClCompile Include="GasDFServ.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MFCTESTSERVDlg.cpp">
+    <ClCompile Include="GasDFServDlg.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="CClientSocket.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CListenSocket.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="CPythonCLNT.cpp">
+    <ClCompile Include="CClientSocket.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MFCTESTSERV.rc">
+    <ResourceCompile Include="GasDFServ.rc">
       <Filter>리소스 파일</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\MFCTESTSERV.rc2">
+    <None Include="res\GasDFServ.rc2">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\MFCTESTSERV.ico">
+    <Image Include="res\GasDFServ.ico">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

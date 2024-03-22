@@ -6,7 +6,9 @@
 #include "CListenSocket.h"
 #include "CClientSocket.h"
 #include "MFCTESTSERVDlg.h"
-
+#include "CPythonCLNT.h"
+#include <iostream>
+#include <thread>
 
 // CListenSocket
 
@@ -26,14 +28,16 @@ void CListenSocket::OnAccept(int nErrorCode)
 {
     CClientSocket* pClient = new CClientSocket;
     CString str;
+    char* strName;
 
     if (Accept(*pClient)) { // 클라이언트 접속 요청이 오면 서버-클라이언트를 연결시켜준다
         pClient->SetListenSocket(this);
         m_ptrClientSocketList.AddTail(pClient); // 리스트에 클라이언트 소켓 저장
 
-        CMFCTESTSERVDlg* pMain = (CMFCTESTSERVDlg*)AfxGetMainWnd(); 
+        CMFCTESTSERVDlg* pMain = (CMFCTESTSERVDlg*)AfxGetMainWnd();
         str.Format(_T("Client (%d)"), (int)m_ptrClientSocketList.Find(pClient)); // 클라이언트 번호(POSITION(주소) 값)
         pMain->clientList.AddString(str); // 클라이언트가 접속할때마다 리스트에 클라이언트 이름 추가
+
 
     }
     else {
@@ -74,7 +78,6 @@ void CListenSocket::CloseClientSocket(CSocket* pClient)
             }
             indx++;
         }
-
         m_ptrClientSocketList.RemoveAt(pos);
         delete pClient;
     }

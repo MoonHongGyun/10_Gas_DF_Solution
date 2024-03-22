@@ -7,6 +7,7 @@
 #include "CListenSocket.h"
 #include "MFCTESTSERVDlg.h"
 #include <iostream>
+#include <thread>
 
 
 
@@ -21,6 +22,20 @@ CClientSocket::~CClientSocket()
 }
 
 
+void Handleclient1(CAsyncSocket* pClient)
+{
+    int nTest;
+    pClient->Receive(&nTest, 4);
+    AfxMessageBox(_T("asd"));
+}
+
+void Handleclient2(CAsyncSocket* pClient)
+{
+    int nTest;
+    pClient->Receive(&nTest, 4);
+    AfxMessageBox(_T("qwe"));
+}
+
 // CClientSocket 멤버 함수
 
 void CClientSocket::SetListenSocket(CAsyncSocket* pSocket)
@@ -31,31 +46,42 @@ void CClientSocket::SetListenSocket(CAsyncSocket* pSocket)
 
 void CClientSocket::OnReceive(int nErrorCode)
 {
-    CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\testimage\\shape.jpg");
+    int nNameLen;
+    Receive(&nNameLen, 4);
 
-    CFile targetfile;
-    targetfile.Open(strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
+    if (nNameLen == 123)
+    {
+        std::thread t1(&Handleclient1, m_pListenSocket);
+        t1.detach();
+    }
+    else
+    {
+        std::thread t1(&Handleclient2, m_pListenSocket);
+        t1.detach();
+    }
 
-    int nFileLength;
-    Receive(&nFileLength, 4);
-
-    byte* data = new byte[nFileLength];
     
-    DWORD dwRead;
-    dwRead = Receive(data, nFileLength);
-    targetfile.Write(data, dwRead);
-    //do
-    //{
-    //    dwRead = Receive(data, 4096);
-    //    targetfile.Write(data, dwRead);
-    //} while (dwRead > 0);
+    
+    //CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\testimage\\shape.jpg");
 
-    delete data;
-    targetfile.Close();
+    //CFile targetfile;
+    //targetfile.Open(strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
 
-    CMFCTESTSERVDlg* pMain = (CMFCTESTSERVDlg*)AfxGetMainWnd();
+    //int nFileLength;
+    //Receive(&nFileLength, 4);
 
-    pMain->ViewImage(strFilePath);
+    //byte* data = new byte[nFileLength];
+    //
+    //DWORD dwRead;
+    //dwRead = Receive(data, nFileLength);
+    //targetfile.Write(data, dwRead);
+
+    //delete data;
+    //targetfile.Close();
+
+    //CMFCTESTSERVDlg* pMain = (CMFCTESTSERVDlg*)AfxGetMainWnd();
+
+    //pMain->ViewImage(strFilePath);
 
     //CString strTmp = _T(""), strIPAddress = _T("");
     //UINT uPortNumber = 0;
@@ -85,5 +111,5 @@ void CClientSocket::OnClose(int nErrorCode)
     CListenSocket* pServerSocket = (CListenSocket*)m_pListenSocket;
     pServerSocket->CloseClientSocket(this);
 
-    CSocket::OnClose(nErrorCode);
 }
+

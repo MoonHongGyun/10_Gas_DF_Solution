@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{77E645CA-5ECC-4799-85EC-4774FB5170DC}</ProjectGuid>
+    <ProjectGuid>{3E9D8637-E277-444F-BE67-1DED88B170B4}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
-    <RootNamespace>MFCTESTSERV</RootNamespace>
+    <RootNamespace>GasDFServ</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -185,10 +185,9 @@
   <ItemGroup>
     <ClInclude Include="CClientSocket.h" />
     <ClInclude Include="CListenSocket.h" />
-    <ClInclude Include="CPythonCLNT.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="MFCTESTSERV.h" />
-    <ClInclude Include="MFCTESTSERVDlg.h" />
+    <ClInclude Include="GasDFServ.h" />
+    <ClInclude Include="GasDFServDlg.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -196,9 +195,8 @@
   <ItemGroup>
     <ClCompile Include="CClientSocket.cpp" />
     <ClCompile Include="CListenSocket.cpp" />
-    <ClCompile Include="CPythonCLNT.cpp" />
-    <ClCompile Include="MFCTESTSERV.cpp" />
-    <ClCompile Include="MFCTESTSERVDlg.cpp" />
+    <ClCompile Include="GasDFServ.cpp" />
+    <ClCompile Include="GasDFServDlg.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -207,13 +205,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MFCTESTSERV.rc" />
+    <ResourceCompile Include="GasDFServ.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\MFCTESTSERV.rc2" />
+    <None Include="res\GasDFServ.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\MFCTESTSERV.ico" />
+    <Image Include="res\GasDFServ.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

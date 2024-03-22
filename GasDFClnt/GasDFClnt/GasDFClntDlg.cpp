@@ -1,16 +1,14 @@
 ﻿
-// MFCTESTCLNTDlg.cpp: 구현 파일
+// GasDFClntDlg.cpp: 구현 파일
 //
 
 #include "pch.h"
 #include "framework.h"
-#include "MFCTESTCLNT.h"
-#include "MFCTESTCLNTDlg.h"
+#include "GasDFClnt.h"
+#include "GasDFClntDlg.h"
 #include "afxdialogex.h"
-#include <iostream>
 
 #ifdef _DEBUG
-//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #define new DEBUG_NEW
 #endif
 
@@ -48,36 +46,32 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CMFCTESTCLNTDlg 대화 상자
+// CGasDFClntDlg 대화 상자
 
 
 
-CMFCTESTCLNTDlg::CMFCTESTCLNTDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_MFCTESTCLNT_DIALOG, pParent)
-	, m_sendMsg(_T(""))
+CGasDFClntDlg::CGasDFClntDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_GASDFCLNT_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CMFCTESTCLNTDlg::DoDataExchange(CDataExchange* pDX)
+void CGasDFClntDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_LIST1, m_List);
-	DDX_Text(pDX, IDC_EDIT2, m_sendMsg);
 }
 
-BEGIN_MESSAGE_MAP(CMFCTESTCLNTDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CGasDFClntDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_BTN_SEND, &CMFCTESTCLNTDlg::OnBnClickedBtnSend)
-	ON_BN_CLICKED(IDC_BTN_FILE, &CMFCTESTCLNTDlg::OnBnClickedBtnFile)
+	ON_BN_CLICKED(IDC_BTN_CAPTURE, &CGasDFClntDlg::OnBnClickedBtnCapture)
 END_MESSAGE_MAP()
 
 
-// CMFCTESTCLNTDlg 메시지 처리기
+// CGasDFClntDlg 메시지 처리기
 
-BOOL CMFCTESTCLNTDlg::OnInitDialog()
+BOOL CGasDFClntDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -118,7 +112,7 @@ BOOL CMFCTESTCLNTDlg::OnInitDialog()
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
-void CMFCTESTCLNTDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CGasDFClntDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -135,7 +129,7 @@ void CMFCTESTCLNTDlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  아래 코드가 필요합니다.  문서/뷰 모델을 사용하는 MFC 애플리케이션의 경우에는
 //  프레임워크에서 이 작업을 자동으로 수행합니다.
 
-void CMFCTESTCLNTDlg::OnPaint()
+void CGasDFClntDlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -162,40 +156,14 @@ void CMFCTESTCLNTDlg::OnPaint()
 
 // 사용자가 최소화된 창을 끄는 동안에 커서가 표시되도록 시스템에서
 //  이 함수를 호출합니다.
-HCURSOR CMFCTESTCLNTDlg::OnQueryDragIcon()
+HCURSOR CGasDFClntDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
 
 
-void CMFCTESTCLNTDlg::OnBnClickedBtnSend()
-{
-	//UpdateData(TRUE);
-	//m_Socket.Send((LPVOID)(LPCTSTR)m_sendMsg, m_sendMsg.GetLength() * 2);
-	//m_sendMsg.Format(_T(""));
-	//UpdateData(FALSE);
-	int namelen = 12;
-	m_Socket.Send(&namelen, 4);
-}
-
-
-BOOL CMFCTESTCLNTDlg::PreTranslateMessage(MSG* pMsg)
-{
-	if (pMsg->message == WM_KEYDOWN)
-	{
-		if (pMsg->wParam == VK_RETURN || pMsg->wParam == VK_ESCAPE)
-		{   // 위 VK_RETURN은 Enter, VK_ESCAPE는 ESC을 의미함. 필요시 하나만 사용.
-			OnBnClickedBtnSend();
-			return true;
-		}
-	}
-
-	return CDialogEx::PreTranslateMessage(pMsg);
-}
-
-
-void CMFCTESTCLNTDlg::OnBnClickedBtnFile()
+void CGasDFClntDlg::OnBnClickedBtnCapture()
 {
 	CFile sourceFile;
 	CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\testfile\\shape.jpg");
