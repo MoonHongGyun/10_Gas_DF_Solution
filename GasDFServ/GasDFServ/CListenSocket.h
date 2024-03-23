@@ -12,6 +12,8 @@ public:
 	void CloseClientSocket(CSocket* pClient);
 	CClientSocket* m_pCamClient;
 	CClientSocket* m_pAIClient;
+	void ClienttoAI(CString strFilePath, int nFileSize);
+	void AItoClient(CString strMsg, CString strFilePath, int nFileSize);
 };
 
 

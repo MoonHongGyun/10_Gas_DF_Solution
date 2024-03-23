@@ -6,6 +6,7 @@
 #include "CListenSocket.h"
 #include "CClientSocket.h"
 #include "GasDFServDlg.h"
+#include <iostream>
 
 // CListenSocket
 
@@ -27,11 +28,12 @@ void CListenSocket::OnAccept(int nErrorCode)
 	if (Accept(*pClient))
 	{
 		int nWhoClient;
-		pClient->Receive(&nWhoClient, 4);
-		if (nWhoClient == 1)
+		pClient->Receive(&nWhoClient, sizeof(int));
+		std::cout << ntohl(nWhoClient) << std::endl;
+		if (ntohl(nWhoClient) == 1)
 		{
 			m_pAIClient = pClient;
-			m_pAIClient->SetListenSocket(m_pAIClient, nWhoClient);
+			m_pAIClient->SetListenSocket(m_pAIClient, ntohl(nWhoClient));
 		}
 		else
 		{
@@ -58,4 +60,24 @@ void CListenSocket::CloseClientSocket(CSocket* pClient)
         pClient->Close();
     }
         delete pClient;
+}
+
+void CListenSocket::ClienttoAI(CString strFilePath, int nFileLength)
+{
+	m_pAIClient->Send(&nFileLength, sizeof(int));
+
+	CFile SourceFile;
+	SourceFile.Open((LPCTSTR)strFilePath, CFile::modeRead | CFile::typeBinary);
+
+	DWORD dwRead;
+	byte* data = new byte[nFileLength];
+	dwRead = SourceFile.Read(data, nFileLength);
+	m_pAIClient->Send(data, dwRead);
+
+	SourceFile.Close();
+}
+
+void CListenSocket::AItoClient(CString strMsg, CString strFilePath, int nFileSize)
+{
+
 }

@@ -29,7 +29,6 @@ void CClientSocket::SetListenSocket(CAsyncSocket* pClient,int nWho)
 
 void HandleClientCam(CAsyncSocket* pListenSocket)
 {
-
 	int nFileLength;
 	pListenSocket->Receive(&nFileLength, 4);
 	CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\GasImage\\shape.jpg");
@@ -45,30 +44,32 @@ void HandleClientCam(CAsyncSocket* pListenSocket)
 	delete data;
 	targetFile.Close();
 
-	CGasDFServDlg* pMain = (CGasDFServDlg*)AfxGetMainWnd;
-	pMain->DrawPicture(strFilePath);
+	//CGasDFServDlg* pMain = (CGasDFServDlg*)AfxGetMainWnd;
+	//pMain->DrawPicture(strFilePath);
+
+	CListenSocket* pServerSocket = (CListenSocket*)pListenSocket;
+	pServerSocket->ClienttoAI(strFilePath, nFileLength);
 }
 
 void HandleClientAI(CAsyncSocket* pListenSocket)
 {
 	int nFileLength;
-	pListenSocket->Receive(&nFileLength, 4);
+	pListenSocket->Receive(&nFileLength, sizeof(int));
 	CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\GasImage\\shape.jpg");
 	CFile targetFile;
 	targetFile.Open(strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
 
-	byte* data = new byte[nFileLength];
+	byte* data = new byte[ntohl(nFileLength)];
 
 	DWORD dwRead;
-	dwRead = pListenSocket->Receive(data, nFileLength);
+	dwRead = pListenSocket->Receive(data, ntohl(nFileLength));
 	targetFile.Write(data, dwRead);
 
 	delete data;
 	targetFile.Close();
 
-	//char* strMsg{};
-	//pListenSocket->Receive(strMsg, 1024);
-	//std::cout << strMsg << std::endl;
+	char* strMsg{};
+	pListenSocket->Receive(strMsg, 1024);
 }
 
 void CClientSocket::OnReceive(int nErrorCode)
