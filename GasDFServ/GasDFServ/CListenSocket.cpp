@@ -25,32 +25,23 @@ CListenSocket::~CListenSocket()
 
 void CListenSocket::OnAccept(int nErrorCode)
 {
-	CClientSocket* pClient = new CClientSocket;
-	if (Accept(*pClient))
+	if (m_pCamClient == NULL && m_pAIClient == NULL)
 	{
-		int nWhoClient;
-		pClient->Receive(&nWhoClient, sizeof(int));
-		std::cout << ntohl(nWhoClient) << std::endl;
-		if (ntohl(nWhoClient) == 1)
-		{
-			m_pAIClient = (CAISocket*)pClient;
-			m_pAIClient->setAISocket(m_pAIClient);
-			if (m_pCamClient != NULL)
-			{
-				m_pCamClient->connectAI(m_pAIClient);
-			}
-		}
-		else
-		{
-			m_pCamClient = pClient;
-			m_pCamClient->SetListenSocket(m_pCamClient);
-		}
+		m_pAIClient = new CAISocket;
+		if(!Accept(*m_pAIClient))
+			AfxMessageBox(_T("ERROR : Failed can't accept new Client!"));
+		m_pAIClient->setAISocket(m_pAIClient);
 	}
 	else
 	{
-		delete pClient;
-		AfxMessageBox(_T("ERROR : Failed can't accept new Client!"));
+		m_pCamClient = new CClientSocket;
+		if(!Accept(*m_pCamClient))
+			AfxMessageBox(_T("ERROR : Failed can't accept new Client!"));
+		m_pCamClient->SetListenSocket(m_pCamClient);
+		m_pCamClient->connectAI(m_pAIClient);
+		m_pAIClient->connectCamClient(m_pCamClient);
 	}
+
 
 	CAsyncSocket::OnAccept(nErrorCode);
 }
@@ -65,24 +56,4 @@ void CListenSocket::CloseClientSocket(CSocket* pClient)
         pClient->Close();
     }
         delete pClient;
-}
-
-void CListenSocket::ClienttoAI(CString strFilePath, int nFileLength)
-{
-	m_pAIClient->Send(&nFileLength, sizeof(int));
-
-	CFile SourceFile;
-	SourceFile.Open((LPCTSTR)strFilePath, CFile::modeRead | CFile::typeBinary);
-
-	DWORD dwRead;
-	byte* data = new byte[nFileLength];
-	dwRead = SourceFile.Read(data, nFileLength);
-	m_pAIClient->Send(data, dwRead);
-
-	SourceFile.Close();
-}
-
-void CListenSocket::AItoClient(CString strMsg, CString strFilePath, int nFileSize)
-{
-
 }

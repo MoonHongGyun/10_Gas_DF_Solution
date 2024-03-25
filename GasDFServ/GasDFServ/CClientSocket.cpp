@@ -49,9 +49,6 @@ void CClientSocket::OnReceive(int nErrorCode)
 
 	targetFile.Close();
 
-	//CGasDFServDlg* pMain = (CGasDFServDlg*)AfxGetMainWnd;
-	//pMain->DrawPicture(strFilePath);
-
 	CFile sourceFile;
 	sourceFile.Open((LPCTSTR)strFilePath, CFile::modeRead | CFile::typeBinary);
 

@@ -9,7 +9,8 @@ public:
 	virtual ~CAISocket();
 	void setAISocket(CAsyncSocket* pClient);
 	CAsyncSocket* m_pAIClient;
+	CAsyncSocket* m_pCamClient;
+	void connectCamClient(CAsyncSocket* pClient);
 	virtual void OnReceive(int nErrorCode);
 };
-
-
+ 

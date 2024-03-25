@@ -9,6 +9,7 @@
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #define new DEBUG_NEW
 #endif
 
@@ -107,8 +108,6 @@ BOOL CGasDFClntDlg::OnInitDialog()
 		PostQuitMessage(0);
 		return FALSE;
 	}
-	int ndivNum = 123;
-	m_Socket.Send(&ndivNum, sizeof(int));
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
