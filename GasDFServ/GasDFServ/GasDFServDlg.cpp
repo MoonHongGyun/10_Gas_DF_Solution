@@ -176,5 +176,4 @@ void CGasDFServDlg::DrawPicture(CString strFilePath)
 	//image.Load(strFilePath);//이미지 로드
 	//image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
 	//ReleaseDC(dc);
-	//::SendMessage(GetDlgItem(IDC_PIC_BEFORE),BM_SETIMAGE)
 }

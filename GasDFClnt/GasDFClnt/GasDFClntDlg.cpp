@@ -108,7 +108,7 @@ BOOL CGasDFClntDlg::OnInitDialog()
 		return FALSE;
 	}
 	int ndivNum = 123;
-	m_Socket.Send(&ndivNum, 4);
+	m_Socket.Send(&ndivNum, sizeof(int));
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 

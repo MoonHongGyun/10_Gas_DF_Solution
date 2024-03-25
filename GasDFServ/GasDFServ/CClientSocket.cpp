@@ -20,72 +20,49 @@ CClientSocket::~CClientSocket()
 {
 }
 
-void CClientSocket::SetListenSocket(CAsyncSocket* pClient,int nWho)
+void CClientSocket::SetListenSocket(CAsyncSocket* pClient)
 {
 	m_pListenSocket = pClient;
-	nWhoClient = nWho;
+}
+
+void CClientSocket::connectAI(CAsyncSocket* pClient)
+{
+	m_pAISocket = pClient;
 }
 // CClientSocket 멤버 함수
 
-void HandleClientCam(CAsyncSocket* pListenSocket)
-{
+
+
+void CClientSocket::OnReceive(int nErrorCode)
+{	
 	int nFileLength;
-	pListenSocket->Receive(&nFileLength, 4);
+	Receive(&nFileLength, 4);
 	CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\GasImage\\shape.jpg");
 	CFile targetFile;
-	targetFile.Open(strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
+	targetFile.Open((LPCTSTR)strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
 
 	byte* data = new byte[nFileLength];
 
 	DWORD dwRead;
-	dwRead = pListenSocket->Receive(data, nFileLength);
+	dwRead = Receive(data, nFileLength);
 	targetFile.Write(data, dwRead);
 
-	delete data;
 	targetFile.Close();
 
 	//CGasDFServDlg* pMain = (CGasDFServDlg*)AfxGetMainWnd;
 	//pMain->DrawPicture(strFilePath);
 
-	CListenSocket* pServerSocket = (CListenSocket*)pListenSocket;
-	pServerSocket->ClienttoAI(strFilePath, nFileLength);
-}
+	CFile sourceFile;
+	sourceFile.Open((LPCTSTR)strFilePath, CFile::modeRead | CFile::typeBinary);
 
-void HandleClientAI(CAsyncSocket* pListenSocket)
-{
-	int nFileLength;
-	pListenSocket->Receive(&nFileLength, sizeof(int));
-	CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\GasImage\\shape.jpg");
-	CFile targetFile;
-	targetFile.Open(strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
+	m_pAISocket->Send(&nFileLength, 4);
 
-	byte* data = new byte[ntohl(nFileLength)];
-
-	DWORD dwRead;
-	dwRead = pListenSocket->Receive(data, ntohl(nFileLength));
-	targetFile.Write(data, dwRead);
+	data = new byte[nFileLength];
+	dwRead = sourceFile.Read(data, nFileLength);
+	m_pAISocket->Send(data, dwRead);
 
 	delete data;
-	targetFile.Close();
-
-	char* strMsg{};
-	pListenSocket->Receive(strMsg, 1024);
-}
-
-void CClientSocket::OnReceive(int nErrorCode)
-{
-	if (nWhoClient == 1)
-	{
-		std::thread AIthread(&HandleClientAI, m_pListenSocket);
-		AIthread.join();
-	}
-	else
-	{
-		std::thread Camthread(&HandleClientCam, m_pListenSocket);
-		Camthread.join();
-	}
-
-	
+	sourceFile.Close();
 	CSocket::OnReceive(nErrorCode);
 }
 

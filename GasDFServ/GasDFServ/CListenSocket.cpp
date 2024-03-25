@@ -7,6 +7,7 @@
 #include "CClientSocket.h"
 #include "GasDFServDlg.h"
 #include <iostream>
+#include "CAISocket.h"
 
 // CListenSocket
 
@@ -32,13 +33,17 @@ void CListenSocket::OnAccept(int nErrorCode)
 		std::cout << ntohl(nWhoClient) << std::endl;
 		if (ntohl(nWhoClient) == 1)
 		{
-			m_pAIClient = pClient;
-			m_pAIClient->SetListenSocket(m_pAIClient, ntohl(nWhoClient));
+			m_pAIClient = (CAISocket*)pClient;
+			m_pAIClient->setAISocket(m_pAIClient);
+			if (m_pCamClient != NULL)
+			{
+				m_pCamClient->connectAI(m_pAIClient);
+			}
 		}
 		else
 		{
 			m_pCamClient = pClient;
-			m_pCamClient->SetListenSocket(m_pCamClient, nWhoClient);
+			m_pCamClient->SetListenSocket(m_pCamClient);
 		}
 	}
 	else

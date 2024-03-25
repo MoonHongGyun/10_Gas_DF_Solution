@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CAISocket.h" />
     <ClInclude Include="CClientSocket.h" />
     <ClInclude Include="CListenSocket.h" />
     <ClInclude Include="framework.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CAISocket.cpp" />
     <ClCompile Include="CClientSocket.cpp" />
     <ClCompile Include="CListenSocket.cpp" />
     <ClCompile Include="GasDFServ.cpp" />
