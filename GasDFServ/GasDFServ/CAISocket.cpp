@@ -4,7 +4,7 @@
 #include "pch.h"
 #include "GasDFServ.h"
 #include "CAISocket.h"
-
+#include <iostream>
 
 // CAISocket
 
@@ -27,20 +27,24 @@ void CAISocket::setAISocket(CAsyncSocket* pClient)
 void CAISocket::OnReceive(int nErrorCode)
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
-	int nFileLength;
-	Receive(&nFileLength, 4);
-	CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\GasImage\\shape.jpg");
-	CFile targetFile;
-	targetFile.Open(strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
+	//int nFileLength;
+	//Receive(&nFileLength, 4);
+	//CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\GasImage\\shape.jpg");
+	//CFile targetFile;
+	//targetFile.Open(strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
 
-	byte* data = new byte[nFileLength];
+	//byte* data = new byte[nFileLength];
 
-	DWORD dwRead;
-	dwRead = Receive(data, nFileLength);
-	targetFile.Write(data, dwRead);
+	//DWORD dwRead;
+	//dwRead = Receive(data, nFileLength);
+	//targetFile.Write(data, dwRead);
 
-	delete data;
-	targetFile.Close();
+	//delete data;
+	//targetFile.Close();
+	
+	char* strMsg = NULL;
+	Receive(strMsg, 1024);
+	std::cout << strMsg << std::endl;
 
 	CSocket::OnReceive(nErrorCode);
 }

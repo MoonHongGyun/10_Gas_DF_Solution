@@ -55,7 +55,8 @@ void CClientSocket::OnReceive(int nErrorCode)
 	CFile sourceFile;
 	sourceFile.Open((LPCTSTR)strFilePath, CFile::modeRead | CFile::typeBinary);
 
-	m_pAISocket->Send(&nFileLength, 4);
+	int ntest = ntohl(nFileLength);
+	m_pAISocket->Send(&ntest, 4);
 
 	data = new byte[nFileLength];
 	dwRead = sourceFile.Read(data, nFileLength);
