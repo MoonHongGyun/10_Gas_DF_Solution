@@ -2,23 +2,24 @@
 // GasDFServDlg.h: 헤더 파일
 //
 #include "CListenSocket.h"
+#define WM_USER_DRAW_PICTURE WM_USER+1
 #pragma once
 
 
 // CGasDFServDlg 대화 상자
 class CGasDFServDlg : public CDialogEx
 {
-// 생성입니다.
+	// 생성입니다.
 public:
 	CGasDFServDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
 	CListenSocket m_ListenSocket;
 
-// 대화 상자 데이터입니다.
+	// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_GASDFSERV_DIALOG };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 지원입니다.
 
 
@@ -33,10 +34,11 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	CListBox m_PicList;
-	CListBox m_ErrorList;
-	CListBox m_OnoffList;
 	CStatic m_PicBefore;
 	CStatic m_PicAfter;
 	void DrawPicture(CString strFilePath);
+	LRESULT OnDrawPicture(WPARAM wParam, LPARAM lParam);
+	CListCtrl m_PicList;
+	CListCtrl m_ErrorList;
+	CListCtrl m_OnoffList;
 };

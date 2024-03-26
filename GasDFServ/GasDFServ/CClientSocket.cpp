@@ -54,8 +54,7 @@ void CClientSocket::OnReceive(int nErrorCode)
 	CFile sourceFile;
 	sourceFile.Open((LPCTSTR)strFilePath, CFile::modeRead | CFile::typeBinary);
 
-	CGasDFServDlg* pMain = (CGasDFServDlg*)AfxGetMainWnd;
-	pMain->DrawPicture(strFilePath);
+	::PostMessage(AfxGetMainWnd()->m_hWnd, WM_USER_DRAW_PICTURE, (WPARAM)(LPCTSTR)strFilePath, 0);
 
 	int ntest = ntohl(nFileLength);
 	m_pAISocket->Send(&ntest, 4);

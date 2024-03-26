@@ -60,20 +60,27 @@ CGasDFServDlg::CGasDFServDlg(CWnd* pParent /*=nullptr*/)
 void CGasDFServDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_LIST_PIC, m_PicList);
-	DDX_Control(pDX, IDC_LIST_ERROR, m_ErrorList);
-	DDX_Control(pDX, IDC_LIST_ONOFF, m_OnoffList);
 	DDX_Control(pDX, IDC_PIC_BEFORE, m_PicBefore);
 	DDX_Control(pDX, IDC_PIC_AFTER, m_PicAfter);
+	DDX_Control(pDX, IDC_PIC_LIST, m_PicList);
+	DDX_Control(pDX, IDC_ERROR_LIST, m_ErrorList);
+	DDX_Control(pDX, IDC_ONOFF_LIST, m_OnoffList);
 }
 
 BEGIN_MESSAGE_MAP(CGasDFServDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_MESSAGE(WM_USER_DRAW_PICTURE, OnDrawPicture)
 END_MESSAGE_MAP()
 
+LRESULT CGasDFServDlg::OnDrawPicture(WPARAM wParam, LPARAM lParam)
+{
+	CString strFilePath = (LPCTSTR)wParam;
+	DrawPicture(strFilePath);
 
+	return 0;
+}
 // CGasDFServDlg 메시지 처리기
 
 BOOL CGasDFServDlg::OnInitDialog()
@@ -114,6 +121,13 @@ BOOL CGasDFServDlg::OnInitDialog()
 	else {
 		AfxMessageBox(_T("ERROR:Failed to create server socket!"));
 	}
+
+	m_PicList.InsertColumn(0, _T("CODE"), LVCFMT_CENTER, 100);
+	m_PicList.InsertColumn(1, _T("TIME"), LVCFMT_CENTER, 100);
+	m_ErrorList.InsertColumn(0, _T("CODE"), LVCFMT_CENTER, 100);
+	m_OnoffList.InsertColumn(0, _T("CODE"), LVCFMT_CENTER, 100);
+	m_OnoffList.InsertColumn(1, _T("ONOFF"), LVCFMT_CENTER, 100);
+	m_OnoffList.InsertColumn(2, _T("%"), LVCFMT_CENTER, 100);
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -169,11 +183,16 @@ HCURSOR CGasDFServDlg::OnQueryDragIcon()
 void CGasDFServDlg::DrawPicture(CString strFilePath)
 {
 	CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
-	m_PicAfter.GetWindowRect(rect); //GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
+	m_PicBefore.GetWindowRect(rect); //GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
 	CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터
-	dc = m_PicAfter.GetDC(); //픽쳐 컨트롤의 DC를 얻는다.
-	CImage image;//불러오고 싶은 이미지를 로드할 CImage 
+	dc = m_PicBefore.GetDC(); //픽쳐 컨트롤의 DC를 얻는다.
+	CImage image;//불러오고 싶은 이미지를 로드할 CImage  
 	image.Load(strFilePath);//이미지 로드
 	image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
 	ReleaseDC(dc);
+	//char* toekn;
+	//char* strMsg = "123#123#123";
+	//toekn = strtok(strMsg, "#");
+	m_PicList.InsertItem(0, _T("shape"));
+	m_PicList.SetItemText(0, 1, _T("2024.03.26.04.36.00"));
 }
