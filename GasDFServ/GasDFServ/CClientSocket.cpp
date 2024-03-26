@@ -37,6 +37,7 @@ void CClientSocket::OnReceive(int nErrorCode)
 {	
 	int nFileLength;
 	Receive(&nFileLength, 4);
+	std::cout << "1" << std::endl;
 	CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\GasImage\\shape.jpg");
 	CFile targetFile;
 	targetFile.Open((LPCTSTR)strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
@@ -45,12 +46,16 @@ void CClientSocket::OnReceive(int nErrorCode)
 
 	DWORD dwRead;
 	dwRead = Receive(data, nFileLength);
+	std::cout << "2" << std::endl;
 	targetFile.Write(data, dwRead);
 
 	targetFile.Close();
 
 	CFile sourceFile;
 	sourceFile.Open((LPCTSTR)strFilePath, CFile::modeRead | CFile::typeBinary);
+
+	CGasDFServDlg* pMain = (CGasDFServDlg*)AfxGetMainWnd;
+	pMain->DrawPicture(strFilePath);
 
 	int ntest = ntohl(nFileLength);
 	m_pAISocket->Send(&ntest, 4);

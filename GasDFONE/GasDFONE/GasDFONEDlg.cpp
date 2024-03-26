@@ -1,15 +1,14 @@
 ﻿
-// GasDFServDlg.cpp: 구현 파일
+// GasDFONEDlg.cpp: 구현 파일
 //
 
 #include "pch.h"
 #include "framework.h"
-#include "GasDFServ.h"
-#include "GasDFServDlg.h"
+#include "GasDFONE.h"
+#include "GasDFONEDlg.h"
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #define new DEBUG_NEW
 #endif
 
@@ -47,36 +46,31 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CGasDFServDlg 대화 상자
+// CGasDFONEDlg 대화 상자
 
 
 
-CGasDFServDlg::CGasDFServDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_GASDFSERV_DIALOG, pParent)
+CGasDFONEDlg::CGasDFONEDlg(CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_GASDFONE_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CGasDFServDlg::DoDataExchange(CDataExchange* pDX)
+void CGasDFONEDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_LIST_PIC, m_PicList);
-	DDX_Control(pDX, IDC_LIST_ERROR, m_ErrorList);
-	DDX_Control(pDX, IDC_LIST_ONOFF, m_OnoffList);
-	DDX_Control(pDX, IDC_PIC_BEFORE, m_PicBefore);
-	DDX_Control(pDX, IDC_PIC_AFTER, m_PicAfter);
 }
 
-BEGIN_MESSAGE_MAP(CGasDFServDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CGasDFONEDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 END_MESSAGE_MAP()
 
 
-// CGasDFServDlg 메시지 처리기
+// CGasDFONEDlg 메시지 처리기
 
-BOOL CGasDFServDlg::OnInitDialog()
+BOOL CGasDFONEDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -117,7 +111,7 @@ BOOL CGasDFServDlg::OnInitDialog()
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
-void CGasDFServDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CGasDFONEDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -134,7 +128,7 @@ void CGasDFServDlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  아래 코드가 필요합니다.  문서/뷰 모델을 사용하는 MFC 애플리케이션의 경우에는
 //  프레임워크에서 이 작업을 자동으로 수행합니다.
 
-void CGasDFServDlg::OnPaint()
+void CGasDFONEDlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -161,19 +155,8 @@ void CGasDFServDlg::OnPaint()
 
 // 사용자가 최소화된 창을 끄는 동안에 커서가 표시되도록 시스템에서
 //  이 함수를 호출합니다.
-HCURSOR CGasDFServDlg::OnQueryDragIcon()
+HCURSOR CGasDFONEDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-void CGasDFServDlg::DrawPicture(CString strFilePath)
-{
-	CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
-	m_PicAfter.GetWindowRect(rect); //GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
-	CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터
-	dc = m_PicAfter.GetDC(); //픽쳐 컨트롤의 DC를 얻는다.
-	CImage image;//불러오고 싶은 이미지를 로드할 CImage 
-	image.Load(strFilePath);//이미지 로드
-	image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
-	ReleaseDC(dc);
-}
