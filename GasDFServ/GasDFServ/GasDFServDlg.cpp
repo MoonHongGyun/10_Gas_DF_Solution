@@ -9,9 +9,9 @@
 #include "afxdialogex.h"
 #include <iostream>
 #include <string.h>
-#include "mysql.h"
+#include <mysql.h>
 
-#define DB_IP "10.10.20.123"
+#define DB_IP "127.0.0.1"
 #define DB_ID "root"
 #define DB_PASS "1111"
 #define DB_NAME "gasdf"
@@ -150,11 +150,11 @@ BOOL CGasDFServDlg::OnInitDialog()
 	}
 
 	m_PicList.InsertColumn(0, _T("CODE"), LVCFMT_CENTER, 100);
-	m_PicList.InsertColumn(1, _T("TIME"), LVCFMT_CENTER, 100);
+	m_PicList.InsertColumn(1, _T("TIME"), LVCFMT_CENTER, 200);
 	m_ErrorList.InsertColumn(0, _T("CODE"), LVCFMT_CENTER, 100);
 	m_OnoffList.InsertColumn(0, _T("CODE"), LVCFMT_CENTER, 100);
 	m_OnoffList.InsertColumn(1, _T("ONOFF"), LVCFMT_CENTER, 100);
-	m_OnoffList.InsertColumn(2, _T("%"), LVCFMT_CENTER, 100);
+	m_OnoffList.InsertColumn(2, _T("ANGLE"), LVCFMT_CENTER, 100);
 
 
 	mysql_init(&mysql);
@@ -233,7 +233,7 @@ void CGasDFServDlg::DrawPictureAfter()
 {
 	static int ImageCount = 1;
 	CString strFilePath;
-	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimg\\%d.jpg"), ImageCount++);
+	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimg\\%d.jpg"), ImageCount);
 	CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
 	m_PicAfter.GetWindowRect(rect); //GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
 	CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터
@@ -242,6 +242,21 @@ void CGasDFServDlg::DrawPictureAfter()
 	image.Load(strFilePath);//이미지 로드
 	image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
 	ReleaseDC(dc);
+	CString strImageCount;
+	strImageCount.Format(_T("%d"), ImageCount);
+	CString strDate;
+	SYSTEMTIME stime;
+	::GetSystemTime(&stime);
+	strDate.Format(_T("%04d-%02d-%02d %02d:%02d:%02d"),
+		stime.wYear,
+		stime.wMonth,
+		stime.wDay,
+		(stime.wHour + 9) % 24,
+		stime.wMinute,
+		stime.wSecond);
+	m_PicList.InsertItem(ImageCount-1, strImageCount);
+	m_PicList.SetItemText(ImageCount-1, 1, strDate);
+	ImageCount++;
 }
 
 void CGasDFServDlg::UpdateList(char* strData)
@@ -251,19 +266,22 @@ void CGasDFServDlg::UpdateList(char* strData)
 	static int ErrorListCount = 0;
 	static int ListCount = 0;
 	strMsgList.SetSize(4);
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		AfxExtractSubString(strMsgList[i], strMsg, i, '#');
 	}
 
 	if (strMsgList[1] == "X")
 	{
-		m_ErrorList.InsertItem(ErrorListCount++, strMsgList[0]);
+		CString invertquery = _T("insert into result(code,angle) values('") + strMsgList[0] + _T("','") + strMsgList[2] + _T("')");
+		CStringA queryBuffer = (CStringA)invertquery;
+		const char* query;
+		query = queryBuffer.GetBuffer();
+		mysql_query(&mysql, query);
 	}
 	m_OnoffList.InsertItem(ListCount, strMsgList[0]);
-	m_OnoffList.SetItemText(ListCount, 1, strMsgList[2]);
-	m_OnoffList.SetItemText(ListCount++, 2, strMsgList[3]);
+	m_OnoffList.SetItemText(ListCount, 1, strMsgList[1]);
+	m_OnoffList.SetItemText(ListCount++, 2, strMsgList[2]);
 
-	//const char* query = "insert into result(code,angle) values('1','25')";
-	//mysql_query(&mysql, query);
+
 }

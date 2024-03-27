@@ -34,7 +34,7 @@ void CAISocket::OnReceive(int nErrorCode)
 	static int ImageCount = 1;
 	int nFileLength;
 	Receive(&nFileLength, 4);
-	std::cout << "3" << std::endl;
+	//std::cout << "3" << std::endl;
 	CString strFilePath;
 	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimg\\%d.jpg"),ImageCount++);
 	CFile targetFile;
@@ -44,7 +44,7 @@ void CAISocket::OnReceive(int nErrorCode)
 
 	DWORD dwRead;
 	dwRead = Receive(data, nFilelength);
-	std::cout << "4" << std::endl;
+	//std::cout << "4" << std::endl;
 	targetFile.Write(data, dwRead);
 
 	targetFile.Close();
@@ -54,11 +54,11 @@ void CAISocket::OnReceive(int nErrorCode)
 
 	char* strMsg = new char[1024];
 	int nMsglen = Receive(strMsg, sizeof(strMsg));
-	std::cout << "5" << std::endl;
 	strMsg[nMsglen] = 0;
-	char* teststrmsg = "asdf#qwer#zxc#werg";
+	//std::cout << "5" << std::endl;
+
 	::PostMessage(AfxGetMainWnd()->m_hWnd, WM_USER_DRAW_AFTER, 0, 0);
-	::SendMessage(AfxGetMainWnd()->m_hWnd, WM_USER_UPDATE_LIST, 0, (LPARAM)teststrmsg);
+	::SendMessage(AfxGetMainWnd()->m_hWnd, WM_USER_UPDATE_LIST, 0, (LPARAM)strMsg);
 
 	m_pCamClient->Send(strMsg, nMsglen);
 	delete strMsg;

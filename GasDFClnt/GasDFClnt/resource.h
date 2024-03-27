@@ -8,7 +8,6 @@
 #define IDD_GASDFCLNT_DIALOG            102
 #define IDP_SOCKETS_INIT_FAILED         103
 #define IDR_MAINFRAME                   128
-#define IDC_BUTTON1                     1000
 #define IDC_BTN_CAPTURE                 1000
 
 // Next default values for new objects

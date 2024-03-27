@@ -38,7 +38,7 @@ void CClientSocket::OnReceive(int nErrorCode)
 	static int ImageCount = 1;
 	int nFileLength;
 	Receive(&nFileLength, 4);
-	std::cout << "1" << std::endl;
+	//std::cout << "1" << std::endl;
 	CString strFilePath;
 	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimg\\%d.jpg"), ImageCount++);
 	CFile targetFile;
@@ -48,7 +48,7 @@ void CClientSocket::OnReceive(int nErrorCode)
 
 	DWORD dwRead;
 	dwRead = Receive(data, nFileLength);
-	std::cout << "2" << std::endl;
+	//std::cout << "2" << std::endl;
 	targetFile.Write(data, dwRead);
 
 	targetFile.Close();
