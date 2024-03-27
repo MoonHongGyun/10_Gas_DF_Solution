@@ -2,7 +2,10 @@
 // GasDFServDlg.h: 헤더 파일
 //
 #include "CListenSocket.h"
-#define WM_USER_DRAW_PICTURE WM_USER+1
+#define WM_USER_DRAW_BEFORE WM_USER+1
+#define WM_USER_DRAW_AFTER WM_USER+2
+#define WM_USER_UPDATE_LIST WM_USER+3
+
 #pragma once
 
 
@@ -36,8 +39,12 @@ protected:
 public:
 	CStatic m_PicBefore;
 	CStatic m_PicAfter;
-	void DrawPicture(CString strFilePath);
-	LRESULT OnDrawPicture(WPARAM wParam, LPARAM lParam);
+	void DrawPictureBefore();
+	void DrawPictureAfter();
+	void UpdateList(char* strData);
+	LRESULT OnDrawPictureBefore(WPARAM wParam, LPARAM lParam);
+	LRESULT OnDrawPictureAfter(WPARAM wParam, LPARAM lParam);
+	LRESULT OnUpdateList(WPARAM wParam, LPARAM lParam);
 	CListCtrl m_PicList;
 	CListCtrl m_ErrorList;
 	CListCtrl m_OnoffList;

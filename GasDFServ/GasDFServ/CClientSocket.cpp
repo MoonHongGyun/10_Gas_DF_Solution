@@ -35,10 +35,12 @@ void CClientSocket::connectAI(CAsyncSocket* pClient)
 
 void CClientSocket::OnReceive(int nErrorCode)
 {	
+	static int ImageCount = 1;
 	int nFileLength;
 	Receive(&nFileLength, 4);
 	std::cout << "1" << std::endl;
-	CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\GasImage\\shape.jpg");
+	CString strFilePath;
+	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimg\\%d.jpg"), ImageCount++);
 	CFile targetFile;
 	targetFile.Open((LPCTSTR)strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
 
@@ -54,7 +56,7 @@ void CClientSocket::OnReceive(int nErrorCode)
 	CFile sourceFile;
 	sourceFile.Open((LPCTSTR)strFilePath, CFile::modeRead | CFile::typeBinary);
 
-	::PostMessage(AfxGetMainWnd()->m_hWnd, WM_USER_DRAW_PICTURE, (WPARAM)(LPCTSTR)strFilePath, 0);
+	::PostMessage(AfxGetMainWnd()->m_hWnd, WM_USER_DRAW_BEFORE, 0, 0);
 
 	int ntest = ntohl(nFileLength);
 	m_pAISocket->Send(&ntest, 4);

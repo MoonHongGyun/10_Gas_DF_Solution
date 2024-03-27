@@ -4,6 +4,7 @@
 #include "pch.h"
 #include "GasDFServ.h"
 #include "CAISocket.h"
+#include "GasDFServDlg.h"
 #include <iostream>
 
 // CAISocket
@@ -30,10 +31,12 @@ void CAISocket::connectCamClient(CAsyncSocket* pClient)
 void CAISocket::OnReceive(int nErrorCode)
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	static int ImageCount = 1;
 	int nFileLength;
 	Receive(&nFileLength, 4);
 	std::cout << "3" << std::endl;
-	CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\Gasimg\\shape.jpg");
+	CString strFilePath;
+	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimg\\%d.jpg"),ImageCount++);
 	CFile targetFile;
 	targetFile.Open(strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
 	int nFilelength = ntohl(nFileLength);
@@ -53,6 +56,9 @@ void CAISocket::OnReceive(int nErrorCode)
 	int nMsglen = Receive(strMsg, sizeof(strMsg));
 	std::cout << "5" << std::endl;
 	strMsg[nMsglen] = 0;
+	char* teststrmsg = "asdf#qwer#zxc#werg";
+	::PostMessage(AfxGetMainWnd()->m_hWnd, WM_USER_DRAW_AFTER, 0, 0);
+	::SendMessage(AfxGetMainWnd()->m_hWnd, WM_USER_UPDATE_LIST, 0, (LPARAM)teststrmsg);
 
 	m_pCamClient->Send(strMsg, nMsglen);
 	delete strMsg;
