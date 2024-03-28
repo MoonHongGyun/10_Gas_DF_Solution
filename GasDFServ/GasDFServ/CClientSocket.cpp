@@ -38,25 +38,26 @@ void CClientSocket::OnReceive(int nErrorCode)
 	static int ImageCount = 1;
 	int nFileLength;
 	Receive(&nFileLength, 4);
-	//std::cout << "1" << std::endl;
+	std::cout << "1" << std::endl;
 	CString strFilePath;
 	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimage\\%d.jpg"), ImageCount++);
 	CFile targetFile;
 	targetFile.Open((LPCTSTR)strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
-
+	Sleep(100);
 	byte* data = new byte[nFileLength];
 
 	DWORD dwRead;
 	dwRead = Receive(data, nFileLength);
-	//std::cout << "2" << std::endl;
+	std::cout << "2" << std::endl;
 	targetFile.Write(data, dwRead);
 
 	targetFile.Close();
 
+
+	::SendMessage(AfxGetMainWnd()->m_hWnd, WM_USER_DRAW_BEFORE, 0, 0);
+
 	CFile sourceFile;
 	sourceFile.Open((LPCTSTR)strFilePath, CFile::modeRead | CFile::typeBinary);
-
-	::PostMessage(AfxGetMainWnd()->m_hWnd, WM_USER_DRAW_BEFORE, 0, 0);
 
 	int ntest = ntohl(nFileLength);
 	m_pAISocket->Send(&ntest, 4);

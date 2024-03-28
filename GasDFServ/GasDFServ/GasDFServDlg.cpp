@@ -46,6 +46,7 @@ public:
 // 구현입니다.
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
@@ -88,6 +89,7 @@ BEGIN_MESSAGE_MAP(CGasDFServDlg, CDialogEx)
 	ON_MESSAGE(WM_USER_DRAW_BEFORE, OnDrawPictureBefore)
 	ON_MESSAGE(WM_USER_DRAW_AFTER, OnDrawPictureAfter)
 	ON_MESSAGE(WM_USER_UPDATE_LIST, OnUpdateList)
+	ON_NOTIFY(NM_DBLCLK, IDC_ERROR_LIST, &CGasDFServDlg::OnNMDblclkErrorList)
 END_MESSAGE_MAP()
 
 LRESULT CGasDFServDlg::OnDrawPictureBefore(WPARAM wParam, LPARAM lParam)
@@ -164,6 +166,7 @@ BOOL CGasDFServDlg::OnInitDialog()
 	{
 		AfxMessageBox(_T("DB NOT OPEN"));
 	}
+	m_ErrorList.InsertItem(0, _T("asdqw"));
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -268,14 +271,15 @@ void CGasDFServDlg::UpdateList(char* strData)
 	static int ErrorListCount = 0;
 	static int ListCount = 0;
 	strMsgList.SetSize(4);
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		AfxExtractSubString(strMsgList[i], strMsg, i, '#');
 	}
 
-	if (strMsgList[1] == "X")
+	if (strMsgList[4] == "X")
 	{
-		CString invertquery = _T("insert into result(code,angle) values('") + strMsgList[0] + _T("','") + strMsgList[2] + _T("')");
+		m_ErrorList.InsertItem(ErrorListCount++, strMsgList[0]);
+		CString invertquery = _T("insert into result(CODE,ERROR,ONOFF,ANGLE) values('") + strMsgList[0] + _T("','") + strMsgList[3] +_T("','") + strMsgList[1] + _T("','") + strMsgList[2] + _T("')");
 		CStringA queryBuffer = (CStringA)invertquery;
 		const char* query;
 		query = queryBuffer.GetBuffer();
@@ -286,4 +290,15 @@ void CGasDFServDlg::UpdateList(char* strData)
 	m_OnoffList.SetItemText(ListCount++, 2, strMsgList[2]);
 
 
+}
+
+void CGasDFServDlg::OnNMDblclkErrorList(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int row = pNMItemActivate->iItem;
+	int col = pNMItemActivate->iSubItem;
+	CString strCode = m_ErrorList.GetItemText(row, col);
+	
+	*pResult = 0;
 }

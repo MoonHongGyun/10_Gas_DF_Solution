@@ -48,4 +48,5 @@ public:
 	CListCtrl m_PicList;
 	CListCtrl m_ErrorList;
 	CListCtrl m_OnoffList;
+	afx_msg void OnNMDblclkErrorList(NMHDR* pNMHDR, LRESULT* pResult);
 };
