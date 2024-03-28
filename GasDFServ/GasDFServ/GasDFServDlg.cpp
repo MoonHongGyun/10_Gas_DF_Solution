@@ -218,7 +218,9 @@ HCURSOR CGasDFServDlg::OnQueryDragIcon()
 
 void CGasDFServDlg::DrawPictureBefore()
 {
-	CString strFilePath = _T("C:\\Users\\IOT\\Desktop\\GasImage\\shape.jpg");
+	static int imageCount = 1;
+	CString strFilePath;
+	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimage\\%d.jpg"), imageCount++);
 	CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
 	m_PicBefore.GetWindowRect(rect); //GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
 	CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터

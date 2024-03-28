@@ -5,7 +5,10 @@
 #pragma once
 
 #include "CConnectSocket.h"
+#include "opencv2/opencv.hpp"
 
+
+using namespace cv;
 // CGasDFClntDlg 대화 상자
 class CGasDFClntDlg : public CDialogEx
 {
@@ -13,6 +16,9 @@ class CGasDFClntDlg : public CDialogEx
 public:
 	CGasDFClntDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
 	CConnectSocket m_Socket;
+	VideoCapture* capture;
+	Mat mat_frame;
+	CImage cimage_mfc;
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
@@ -35,4 +41,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedBtnCapture();
+	CStatic m_Cam;
+	afx_msg void OnDestroy();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

@@ -40,7 +40,7 @@ void CClientSocket::OnReceive(int nErrorCode)
 	Receive(&nFileLength, 4);
 	//std::cout << "1" << std::endl;
 	CString strFilePath;
-	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimg\\%d.jpg"), ImageCount++);
+	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimage\\%d.jpg"), ImageCount++);
 	CFile targetFile;
 	targetFile.Open((LPCTSTR)strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
 
