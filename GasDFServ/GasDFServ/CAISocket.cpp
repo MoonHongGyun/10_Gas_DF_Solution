@@ -52,8 +52,11 @@ void CAISocket::OnReceive(int nErrorCode)
 	char* strFilecheck = "ok";
 	Send(strFilecheck, strlen(strFilecheck));
 
-	char* strMsg = new char[1024];
-	int nMsglen = Receive(strMsg, sizeof(strMsg));
+
+	int nstrLen;
+	Receive(&nstrLen, 4);
+	char* strMsg = new char[ntohl(nstrLen)];
+	int nMsglen = Receive(strMsg, ntohl(nstrLen));
 	strMsg[nMsglen] = 0;
 	std::cout << "5" << std::endl;
 

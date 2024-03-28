@@ -188,6 +188,7 @@
   <ItemGroup>
     <ClInclude Include="CAISocket.h" />
     <ClInclude Include="CClientSocket.h" />
+    <ClInclude Include="CERRORDlg.h" />
     <ClInclude Include="CListenSocket.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GasDFServ.h" />
@@ -199,6 +200,7 @@
   <ItemGroup>
     <ClCompile Include="CAISocket.cpp" />
     <ClCompile Include="CClientSocket.cpp" />
+    <ClCompile Include="CERRORDlg.cpp" />
     <ClCompile Include="CListenSocket.cpp" />
     <ClCompile Include="GasDFServ.cpp" />
     <ClCompile Include="GasDFServDlg.cpp" />

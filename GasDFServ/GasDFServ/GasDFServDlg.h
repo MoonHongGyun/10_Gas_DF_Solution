@@ -2,6 +2,7 @@
 // GasDFServDlg.h: 헤더 파일
 //
 #include "CListenSocket.h"
+#include "CERRORDlg.h"
 #define WM_USER_DRAW_BEFORE WM_USER+1
 #define WM_USER_DRAW_AFTER WM_USER+2
 #define WM_USER_UPDATE_LIST WM_USER+3
@@ -49,4 +50,5 @@ public:
 	CListCtrl m_ErrorList;
 	CListCtrl m_OnoffList;
 	afx_msg void OnNMDblclkErrorList(NMHDR* pNMHDR, LRESULT* pResult);
+	CERRORDlg* m_pErrorDlg;
 };

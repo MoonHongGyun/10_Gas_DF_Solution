@@ -166,7 +166,10 @@ BOOL CGasDFServDlg::OnInitDialog()
 	{
 		AfxMessageBox(_T("DB NOT OPEN"));
 	}
-	m_ErrorList.InsertItem(0, _T("asdqw"));
+	m_ErrorList.InsertItem(0, _T("1"));
+	m_pErrorDlg = new CERRORDlg;
+	m_pErrorDlg->Create(IDD_CERRORDlg, this);
+
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -270,7 +273,7 @@ void CGasDFServDlg::UpdateList(char* strData)
 	CStringArray strMsgList;
 	static int ErrorListCount = 0;
 	static int ListCount = 0;
-	strMsgList.SetSize(4);
+	strMsgList.SetSize(5);
 	for (int i = 0; i < 5; i++)
 	{
 		AfxExtractSubString(strMsgList[i], strMsg, i, '#');
@@ -298,7 +301,13 @@ void CGasDFServDlg::OnNMDblclkErrorList(NMHDR* pNMHDR, LRESULT* pResult)
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	int row = pNMItemActivate->iItem;
 	int col = pNMItemActivate->iSubItem;
-	CString strCode = m_ErrorList.GetItemText(row, col);
-	
+	CString strCode = _T("C:\\Users\\IOT\\Desktop\\Gasimg\\") + m_ErrorList.GetItemText(row, col) + _T(".jpg");
+	CImage ErrorPic;
+	ErrorPic.Load(strCode);
+	CDC* dc = m_pErrorDlg->m_ERROR_PICTURE.GetDC();
+	CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
+	m_pErrorDlg->m_ERROR_PICTURE.GetWindowRect(rect);
+	ErrorPic.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
+	m_pErrorDlg->ShowWindow(SW_SHOW);
 	*pResult = 0;
 }
