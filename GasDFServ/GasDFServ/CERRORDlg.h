@@ -22,4 +22,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CStatic m_ERROR_PICTURE;
+	CString m_strFilePath;
+	afx_msg void OnPaint();
 };

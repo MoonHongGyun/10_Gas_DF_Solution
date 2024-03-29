@@ -166,7 +166,6 @@ BOOL CGasDFServDlg::OnInitDialog()
 	{
 		AfxMessageBox(_T("DB NOT OPEN"));
 	}
-	m_ErrorList.InsertItem(0, _T("1"));
 	m_pErrorDlg = new CERRORDlg;
 	m_pErrorDlg->Create(IDD_CERRORDlg, this);
 
@@ -302,12 +301,7 @@ void CGasDFServDlg::OnNMDblclkErrorList(NMHDR* pNMHDR, LRESULT* pResult)
 	int row = pNMItemActivate->iItem;
 	int col = pNMItemActivate->iSubItem;
 	CString strCode = _T("C:\\Users\\IOT\\Desktop\\Gasimg\\") + m_ErrorList.GetItemText(row, col) + _T(".jpg");
-	CImage ErrorPic;
-	ErrorPic.Load(strCode);
-	CDC* dc = m_pErrorDlg->m_ERROR_PICTURE.GetDC();
-	CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
-	m_pErrorDlg->m_ERROR_PICTURE.GetWindowRect(rect);
-	ErrorPic.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
+	m_pErrorDlg->m_strFilePath = strCode;
 	m_pErrorDlg->ShowWindow(SW_SHOW);
 	*pResult = 0;
 }

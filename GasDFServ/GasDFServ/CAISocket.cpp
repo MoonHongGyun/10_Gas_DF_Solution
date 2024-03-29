@@ -34,36 +34,45 @@ void CAISocket::OnReceive(int nErrorCode)
 	static int ImageCount = 1;
 	int nFileLength;
 	Receive(&nFileLength, 4);
-	std::cout << "3" << std::endl;
+	std::cout << nFileLength << std::endl;
+	std::cout << ntohl(nFileLength) << std::endl;
 	CString strFilePath;
 	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimg\\%d.jpg"),ImageCount++);
 	CFile targetFile;
 	targetFile.Open(strFilePath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary);
 	int nFilelength = ntohl(nFileLength);
-	byte* data = new byte[nFilelength];
-
+	int nfilebyte = 100;
+	byte* data = new byte[nfilebyte];
 	DWORD dwRead;
-	dwRead = Receive(data, nFilelength);
-	std::cout << "4" << std::endl;
-	targetFile.Write(data, dwRead);
-
+	int ntest = nFilelength / nfilebyte + 1;
+	for (int i = 0; i < ntest ; i++)
+	{
+		if (i == ntest - 1 )
+		{
+			nfilebyte = nFilelength % nfilebyte;
+		}
+		dwRead = Receive(data, nfilebyte);
+		targetFile.Write(data, dwRead);
+	}
+		
+	//char* strFilecheck = "ok";
+	//Send(strFilecheck, strlen(strFilecheck));
 	targetFile.Close();
-	delete data;
-	char* strFilecheck = "ok";
-	Send(strFilecheck, strlen(strFilecheck));
-
-
-	int nstrLen;
-	Receive(&nstrLen, 4);
-	char* strMsg = new char[ntohl(nstrLen)];
-	int nMsglen = Receive(strMsg, ntohl(nstrLen));
-	strMsg[nMsglen] = 0;
-	std::cout << "5" << std::endl;
-
 	::SendMessage(AfxGetMainWnd()->m_hWnd, WM_USER_DRAW_AFTER, 0, 0);
+	delete data;
+	
+	//int nstrLen;
+	//Receive(&nstrLen, 4);
+	//int asdf = ntohl(nstrLen);
+
+	char strMsg[1024];
+	int nMsglen = Receive(strMsg, sizeof(strMsg));
+	strMsg[nMsglen] = 0;
+
+	std::cout << strMsg << std::endl;
+
 	::SendMessage(AfxGetMainWnd()->m_hWnd, WM_USER_UPDATE_LIST, 0, (LPARAM)strMsg);
 
 	m_pCamClient->Send(strMsg, nMsglen);
-	delete strMsg;
 	CSocket::OnReceive(nErrorCode);
 }
