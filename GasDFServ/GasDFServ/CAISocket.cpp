@@ -71,8 +71,8 @@ void CAISocket::OnReceive(int nErrorCode)
 
 	std::cout << strMsg << std::endl;
 
-	::SendMessage(AfxGetMainWnd()->m_hWnd, WM_USER_UPDATE_LIST, 0, (LPARAM)strMsg);
+	// ::SendMessage(AfxGetMainWnd()->m_hWnd, WM_USER_UPDATE_LIST, 0, (LPARAM)strMsg);
 
-	m_pCamClient->Send(strMsg, nMsglen);
+	// m_pCamClient->Send(strMsg, nMsglen);
 	CSocket::OnReceive(nErrorCode);
 }
