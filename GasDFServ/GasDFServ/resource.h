@@ -18,6 +18,10 @@
 #define IDC_ERROR_LIST                  1007
 #define IDC_ERROR_PIC                   1007
 #define IDC_ONOFF_LIST                  1008
+#define IDC_RESULT_COLOR                1010
+#define IDC_RESULT_TEXT                 1011
+#define IDC_RESULT_COLOR2               1012
+#define IDC_RESULT_TEXT2                1013
 
 // Next default values for new objects
 // 
@@ -25,7 +29,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        131
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1008
+#define _APS_NEXT_CONTROL_VALUE         1012
 #define _APS_NEXT_SYMED_VALUE           105
 #endif
 #endif

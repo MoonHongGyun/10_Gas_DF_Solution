@@ -17,6 +17,7 @@ class CGasDFServDlg : public CDialogEx
 public:
 	CGasDFServDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
 	CListenSocket m_ListenSocket;
+	CString m_strdata;
 
 	// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
@@ -51,4 +52,11 @@ public:
 	CListCtrl m_OnoffList;
 	afx_msg void OnNMDblclkErrorList(NMHDR* pNMHDR, LRESULT* pResult);
 	CERRORDlg* m_pErrorDlg;
+	CStatic mResultColor;
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	CStatic mResultTextcon;
+	CStatic mResultTextcon2;
+	CString mResultText2;
+	CString mResultText;
+	CStatic mResultColor2;
 };

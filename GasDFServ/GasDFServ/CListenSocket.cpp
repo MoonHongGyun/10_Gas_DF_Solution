@@ -42,7 +42,6 @@ void CListenSocket::OnAccept(int nErrorCode)
 		m_pAIClient->connectCamClient(m_pCamClient);
 	}
 
-
 	CAsyncSocket::OnAccept(nErrorCode);
 }
 

@@ -15,6 +15,8 @@
 #define DB_ID "root"
 #define DB_PASS "1111"
 #define DB_NAME "gasdf"
+#define COLOR_RED RGB(255, 0, 0)
+#define COLOR_GREEN RGB(0, 255, 0)
 
 #pragma comment(lib,"libmysql.lib")
 #pragma comment(lib,"ws2_32.lib")
@@ -68,6 +70,8 @@ END_MESSAGE_MAP()
 
 CGasDFServDlg::CGasDFServDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_GASDFSERV_DIALOG, pParent)
+	, mResultText2(_T(""))
+	, mResultText(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -80,6 +84,13 @@ void CGasDFServDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PIC_LIST, m_PicList);
 	DDX_Control(pDX, IDC_ERROR_LIST, m_ErrorList);
 	DDX_Control(pDX, IDC_ONOFF_LIST, m_OnoffList);
+	//  DDX_Control(pDX, IDC_COLOR_ONE, mColorResult1);
+	DDX_Control(pDX, IDC_RESULT_COLOR, mResultColor);
+	DDX_Control(pDX, IDC_RESULT_TEXT, mResultTextcon);
+	DDX_Control(pDX, IDC_RESULT_TEXT2, mResultTextcon2);
+	DDX_Text(pDX, IDC_RESULT_TEXT2, mResultText2);
+	DDX_Text(pDX, IDC_RESULT_TEXT, mResultText);
+	DDX_Control(pDX, IDC_RESULT_COLOR2, mResultColor2);
 }
 
 BEGIN_MESSAGE_MAP(CGasDFServDlg, CDialogEx)
@@ -90,6 +101,7 @@ BEGIN_MESSAGE_MAP(CGasDFServDlg, CDialogEx)
 	ON_MESSAGE(WM_USER_DRAW_AFTER, OnDrawPictureAfter)
 	ON_MESSAGE(WM_USER_UPDATE_LIST, OnUpdateList)
 	ON_NOTIFY(NM_DBLCLK, IDC_ERROR_LIST, &CGasDFServDlg::OnNMDblclkErrorList)
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 LRESULT CGasDFServDlg::OnDrawPictureBefore(WPARAM wParam, LPARAM lParam)
@@ -168,8 +180,15 @@ BOOL CGasDFServDlg::OnInitDialog()
 	}
 	m_pErrorDlg = new CERRORDlg;
 	m_pErrorDlg->Create(IDD_CERRORDlg, this);
+	
+	CFont font;
+	font.CreateFont(30, 0, 0, 0, FW_BOLD, 0, 0, 0, 0, 0, 0, 0, 0, _T("Arial"));
+	mResultTextcon.SetFont(&font, true);
+	mResultTextcon2.SetFont(&font, true);
+	font.Detach();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
+
 }
 
 void CGasDFServDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -223,28 +242,13 @@ HCURSOR CGasDFServDlg::OnQueryDragIcon()
 
 void CGasDFServDlg::DrawPictureBefore()
 {
-	static int imageCount = 1;
+	static int ImageCount = 1;
 	CString strFilePath;
-	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimage\\%d.jpg"), imageCount++);
+	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimage\\%d.jpg"), ImageCount);
 	CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
 	m_PicBefore.GetWindowRect(rect); //GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
 	CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터
 	dc = m_PicBefore.GetDC(); //픽쳐 컨트롤의 DC를 얻는다.
-	CImage image;//불러오고 싶은 이미지를 로드할 CImage  
-	image.Load(strFilePath);//이미지 로드
-	image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
-	ReleaseDC(dc);
-}
-
-void CGasDFServDlg::DrawPictureAfter()
-{
-	static int ImageCount = 1;
-	CString strFilePath;
-	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimg\\%d.jpg"), ImageCount);
-	CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
-	m_PicAfter.GetWindowRect(rect); //GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
-	CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터
-	dc = m_PicAfter.GetDC(); //픽쳐 컨트롤의 DC를 얻는다.
 	CImage image;//불러오고 싶은 이미지를 로드할 CImage  
 	image.Load(strFilePath);//이미지 로드
 	image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
@@ -261,9 +265,24 @@ void CGasDFServDlg::DrawPictureAfter()
 		(stime.wHour + 9) % 24,
 		stime.wMinute,
 		stime.wSecond);
-	m_PicList.InsertItem(ImageCount-1, strImageCount);
-	m_PicList.SetItemText(ImageCount-1, 1, strDate);
+	m_PicList.InsertItem(ImageCount - 1, strImageCount);
+	m_PicList.SetItemText(ImageCount - 1, 1, strDate);
 	ImageCount++;
+}
+
+void CGasDFServDlg::DrawPictureAfter()
+{
+	static int imageCount = 1;
+	CString strFilePath;
+	strFilePath.Format(_T("C:\\Users\\IOT\\Desktop\\Gasimg\\%d.jpg"), imageCount++);
+	CRect rect;//픽쳐 컨트롤의 크기를 저장할 CRect 객체
+	m_PicAfter.GetWindowRect(rect); //GetWindowRect를 사용해서 픽쳐 컨트롤의 크기를 받는다.
+	CDC* dc; //픽쳐 컨트롤의 DC를 가져올  CDC 포인터
+	dc = m_PicAfter.GetDC(); //픽쳐 컨트롤의 DC를 얻는다.
+	CImage image;//불러오고 싶은 이미지를 로드할 CImage  
+	image.Load(strFilePath);//이미지 로드
+	image.StretchBlt(dc->m_hDC, 0, 0, rect.Width(), rect.Height(), SRCCOPY);//이미지를 픽쳐 컨트롤 크기로 조정
+	ReleaseDC(dc);
 }
 
 void CGasDFServDlg::UpdateList(char* strData)
@@ -277,21 +296,55 @@ void CGasDFServDlg::UpdateList(char* strData)
 	{
 		AfxExtractSubString(strMsgList[i], strMsg, i, '#');
 	}
+	 
+	CRect rect,rect2;
+	CWnd* pWnd = GetDlgItem(IDC_RESULT_COLOR);
+	CWnd* pWnd2 = GetDlgItem(IDC_RESULT_COLOR2);
+	pWnd->GetClientRect(&rect);
+	pWnd2->GetClientRect(&rect2);
 
-	if (strMsgList[4] == "X")
+	UpdateData(true);
+	mResultText = "";
+	mResultText2 = "";
+	UpdateData(false);
+
+	UpdateData(true);
+	if (strMsgList[4] == "X" || strMsgList[1] == "O")
 	{
 		m_ErrorList.InsertItem(ErrorListCount++, strMsgList[0]);
-		CString invertquery = _T("insert into result(CODE,ERROR,ONOFF,ANGLE) values('") + strMsgList[0] + _T("','") + strMsgList[3] +_T("','") + strMsgList[1] + _T("','") + strMsgList[2] + _T("')");
+		CString invertquery = _T("insert into result(CODE,ERROR,ONOFF,ANGLE) values('") + strMsgList[0] + _T("','") + strMsgList[3] + _T("','") + strMsgList[1] + _T("','") + strMsgList[2] + _T("')");
 		CStringA queryBuffer = (CStringA)invertquery;
 		const char* query;
 		query = queryBuffer.GetBuffer();
 		mysql_query(&mysql, query);
 	}
+	if (strMsgList[4] == "X")
+	{
+		FillRect(mResultColor.GetDC()->GetSafeHdc(), &rect, CBrush(COLOR_RED));
+		mResultText = "ERROR";
+	}
+	else if (strMsgList[4] == "O")
+	{
+		FillRect(mResultColor.GetDC()->GetSafeHdc(), &rect, CBrush(COLOR_GREEN));
+		mResultText = "NORMAL";
+	}
+
+	if (strMsgList[1] == "O")
+	{
+		FillRect(mResultColor2.GetDC()->GetSafeHdc(), &rect2, CBrush(COLOR_RED));
+		mResultText2 = "OPEN";
+	}
+	else if (strMsgList[1] == "X")
+	{
+		FillRect(mResultColor2.GetDC()->GetSafeHdc(), &rect2, CBrush(COLOR_GREEN));
+		mResultText2 = "CLOSE";
+	}
+
 	m_OnoffList.InsertItem(ListCount, strMsgList[0]);
 	m_OnoffList.SetItemText(ListCount, 1, strMsgList[1]);
 	m_OnoffList.SetItemText(ListCount++, 2, strMsgList[2]);
 
-
+	UpdateData(false);
 }
 
 void CGasDFServDlg::OnNMDblclkErrorList(NMHDR* pNMHDR, LRESULT* pResult)
@@ -304,4 +357,20 @@ void CGasDFServDlg::OnNMDblclkErrorList(NMHDR* pNMHDR, LRESULT* pResult)
 	m_pErrorDlg->m_strFilePath = strCode;
 	m_pErrorDlg->ShowWindow(SW_SHOW);
 	*pResult = 0;
+}
+
+
+HBRUSH CGasDFServDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	// TODO:  여기서 DC의 특성을 변경합니다.
+	if (pWnd->GetDlgCtrlID() == IDC_RESULT_TEXT || pWnd->GetDlgCtrlID() == IDC_RESULT_TEXT2)
+	{
+		//pDC->SetTextColor(RGB(255, 255, 255));
+		pDC->SetBkMode(TRANSPARENT);
+		hbr = (HBRUSH)GetStockObject(NULL_BRUSH);
+	}
+	// TODO:  기본값이 적당하지 않으면 다른 브러시를 반환합니다.
+	return hbr;
 }

@@ -44,6 +44,7 @@ void CAISocket::OnReceive(int nErrorCode)
 	int nfilebyte = 100;
 	byte* data = new byte[nfilebyte];
 	DWORD dwRead;
+
 	int ntest = nFilelength / nfilebyte + 1;
 	for (int i = 0; i < ntest ; i++)
 	{
@@ -71,8 +72,8 @@ void CAISocket::OnReceive(int nErrorCode)
 
 	std::cout << strMsg << std::endl;
 
-	// ::SendMessage(AfxGetMainWnd()->m_hWnd, WM_USER_UPDATE_LIST, 0, (LPARAM)strMsg);
-
-	// m_pCamClient->Send(strMsg, nMsglen);
+	 ::SendMessage(AfxGetMainWnd()->m_hWnd, WM_USER_UPDATE_LIST, 0, (LPARAM)strMsg);
+	 Sleep(100);
+	 m_pCamClient->Send(strMsg, nMsglen);
 	CSocket::OnReceive(nErrorCode);
 }
